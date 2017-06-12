@@ -47,14 +47,8 @@ $(document).ready(function() {
             time: timeUntil
         };
 
-         // Get a key for a new Post.
-        var newPostKey = database.ref().child('itinerary').push().key;
-
-        // Uploads employee data to the database
-        var updates = {};
-  updates['/itinerary/' + newPostKey] = newTravel;
-
-  return firebase.database().ref().update(updates);
+        // Get a key for a new Post.
+        database.ref('itinerary').push(newTravel);
 
 
         // Logs everything to console
@@ -76,7 +70,7 @@ $(document).ready(function() {
         $("#inputDest").val("");
         $("#inputInit").val("");
         $("#inputFreq").val("");
-  });  
+    });
 
     // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
     database.ref('itinerary').on("child_added", function(childSnapshot, prevChildKey) {
@@ -92,7 +86,8 @@ $(document).ready(function() {
             var travFreq = childSnapshot.val().freq;
             var travNext = childSnapshot.val().next;
             var travTime = childSnapshot.val().time;
-            
+            var travInit = childSnapshot.val().init;
+
 
 
 
@@ -115,59 +110,79 @@ $(document).ready(function() {
 
 
 
-window.setInterval(function(){
-    database.ref('itinerary').on("child_added", function(childSnapshot, prevChildKey) {
+    // window.setInterval(function() {
+    //     database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
 
 
 
-            console.log(childSnapshot.val());
+    //             console.log(childSnapshot.val());
 
-            // Store everything into a variable.
-            var travMeth = childSnapshot.val().meth;
-            var travComp = childSnapshot.val().comp;
-            var travDest = childSnapshot.val().dest;
-            var travFreq = childSnapshot.val().freq;
-            var travNext = childSnapshot.val().next;
-            var travTime = childSnapshot.val().time;
-            
-
-
-
-           
-            
-
-        var initial = $(childSnapshot.val().init).val();
-        var frequency = $(childSnapshot.val().freq);
-        var firstTimeConverted = moment(initial, "hh:mm");
-        var currentTime = moment();
-        var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-        var tRemainder = diffTime % frequency;
-        var arrival = frequency - tRemainder;
-        var nextArrival = moment().add(arrival, "minutes");
-        var nextArrivalFormatted = moment(nextArrival).format('LLL');
-        var timeUntil = moment(nextArrivalFormatted).fromNow();
-
-            console.log(travMeth);
-            console.log(travComp);
-            console.log(travDest);
-            console.log(travFreq);
-            console.log(travNext);
-            console.log(nextArrivalFormatted);
-            console.log(travTime);
-            console.log(timeUntil);
-
-        },
-        function(errorObject) {
-            console.log("Errors handled: " + errorObject.code);
-        });
+    //             // Store everything into a variable.
+    //             var travMeth = childSnapshot.val().meth;
+    //             var travComp = childSnapshot.val().comp;
+    //             var travDest = childSnapshot.val().dest;
+    //             var travFreq = childSnapshot.val().freq;
+    //             var travNext = childSnapshot.val().next;
+    //             var travTime = childSnapshot.val().time;
 
 
 
-}, 5000);
 
-    
+
+
+
+    //             var initial = $(childSnapshot.val().init);
+    //             var frequency = $(childSnapshot.val().freq);
+    //             var firstTimeConverted = moment(initial, "hh:mm");
+    //             var currentTime = moment();
+    //             var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    //             var tRemainder = diffTime % frequency;
+    //             var arrival = frequency - tRemainder;
+    //             var nextArrival = moment().add(arrival, "minutes");
+    //             var nextArrivalFormatted = moment(nextArrival).format('LLL');
+    //             var timeUntil = moment(childSnapshot.val().next).fromNow();
+    //             console.log(childSnapshot.key);
+    //             console.log(travMeth);
+    //             console.log(travComp);
+    //             console.log(travDest);
+    //             console.log(travFreq);
+    //             console.log(travNext);
+    //             console.log(travTime);
+    //             console.log(timeUntil);
+    //             var newTravel = {
+    //         meth: travMeth,
+    //         comp: travComp,
+    //         dest: travDest,
+    //         init: initial,
+    //         freq: frequency,
+    //         next: nextArrivalFormatted,
+    //         time: timeUntil
+    //     };
+
+    //     var playersRef = firebase.database().ref("itinerary/" + childSnapshot.key);
+    //     playersRef.set({
+    //         meth: travMeth,
+    //         comp: travComp,
+    //         dest: travDest,
+    //         init: initial,
+    //         freq: frequency,
+    //         next: nextArrivalFormatted,
+    //         time: timeUntil
+    //         });
+
+
+
+    //         },
+    //         function(errorObject) {
+    //             console.log("Errors handled: " + errorObject.code);
+    //         });
+
+
+
+    // }, 5000);
+
+
+
+
 
 }); //DONT DELETE THIS!!!
-
-
-
