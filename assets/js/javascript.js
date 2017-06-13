@@ -17,7 +17,7 @@ $(document).ready(function() {
     var database = firebase.database();
 
 
-//click it, bop it, twist it
+    //click it, bop it, twist it
     $("#addTravel").on("click", function(event) {
         event.preventDefault();
 
@@ -108,9 +108,9 @@ $(document).ready(function() {
             console.log("Errors handled: " + errorObject.code);
         });
 
-//sweet Jesus I spent way too much time trying to get the update working...
+    //sweet Jesus I spent way too much time trying to get the update working...
 
-//If you are able to show me the correct code in you comments of my project I would really appreciate it!!!
+    //If you are able to show me the correct code in you comments of my project I would really appreciate it!!!
 
     // window.setInterval(function() {
     //     database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
