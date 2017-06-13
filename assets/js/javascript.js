@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 
 
-    // Initialize Firebase
+    // Initializing
     var config = {
         apiKey: "AIzaSyCKLnx1F9v_sdLGCD-XV3-J64PfXxXpcQA",
         authDomain: "test-project-d8925.firebaseapp.com",
@@ -17,11 +17,11 @@ $(document).ready(function() {
     var database = firebase.database();
 
 
-
+//click it, bop it, twist it
     $("#addTravel").on("click", function(event) {
         event.preventDefault();
 
-        // Grabs user input
+        // get the stuff, math the stuff
         var method = $("#inputMethod").val();
         var company = $("#inputComp").val().trim();
         var destination = $("#inputDest").val().trim();
@@ -36,7 +36,7 @@ $(document).ready(function() {
         var nextArrivalFormatted = moment(nextArrival).format('LLL');
         var timeUntil = moment(nextArrivalFormatted).fromNow();
 
-        // Creates local "temporary" object for holding employee data
+        // hold this for a second
         var newTravel = {
             meth: method,
             comp: company,
@@ -47,11 +47,11 @@ $(document).ready(function() {
             time: timeUntil
         };
 
-        // Get a key for a new Post.
+        // put it in da base
         database.ref('itinerary').push(newTravel);
 
 
-        // Logs everything to console
+        // Logs (of LINCOLN)
         console.log(newTravel.meth);
         console.log(newTravel.comp);
         console.log(newTravel.dest);
@@ -62,24 +62,24 @@ $(document).ready(function() {
 
 
 
-        // Alert
+        // OMG!!
         alert("Itinerary successfully added");
 
-        // Clears all of the text-boxes
+        // Clear-a-box
         $("#inputComp").val("");
         $("#inputDest").val("");
         $("#inputInit").val("");
         $("#inputFreq").val("");
     });
 
-    // 3. Create Firebase event for adding employee to the database and a row in the html when a user adds an entry
+    // are you watching?
     database.ref('itinerary').on("child_added", function(childSnapshot, prevChildKey) {
 
 
 
             console.log(childSnapshot.val());
 
-            // Store everything into a variable.
+            // get it and put it in da variable
             var travMeth = childSnapshot.val().meth;
             var travComp = childSnapshot.val().comp;
             var travDest = childSnapshot.val().dest;
@@ -91,7 +91,7 @@ $(document).ready(function() {
 
 
 
-            // Employee Info
+            // SHOW ME WHAT YOU GOT!
             console.log(travMeth);
             console.log(travComp);
             console.log(travDest);
@@ -99,16 +99,18 @@ $(document).ready(function() {
             console.log(travNext);
             console.log(travTime);
 
-            // full list of items to the well
+            // put the lime in the coconut
             $("#travel-table> tbody").append("<tr><td>" + childSnapshot.val().meth + "</td><td>" + childSnapshot.val().comp + "</td><td>" +
                 childSnapshot.val().dest + "</td><td>" + childSnapshot.val().freq + "</td><td>" + childSnapshot.val().next + "</td><td id=fluid'>" + childSnapshot.val().time + "</td></tr>");
-            // Handle the errors
+            // Does not compute
         },
         function(errorObject) {
             console.log("Errors handled: " + errorObject.code);
         });
 
+//sweet Jesus I spent way too much time trying to get the update working...
 
+//If you are able to show me the correct code in you comments of my project I would really appreciate it!!!
 
     // window.setInterval(function() {
     //     database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
