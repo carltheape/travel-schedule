@@ -15,6 +15,35 @@ $(document).ready(function() {
     firebase.initializeApp(config);
 
     var database = firebase.database();
+    
+    var getTravel = function (){
+        $("#travel-table> tbody").html("");
+        
+        database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
+        
+        var travMeth = childSnapshot.val().meth;
+            var travComp = childSnapshot.val().comp;
+            var travDest = childSnapshot.val().dest;
+            var travInit = childSnapshot.val().init;
+            var travFreq = childSnapshot.val().freq;
+        
+        var firstTimeConverted = moment(travInit, "hh:mm").subtract(1, "years");
+            var currentTime = moment();
+            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+            var tRemainder = diffTime % travFreq;
+            var arrival = travFreq - tRemainder;
+            var nextArrival = moment().add(arrival, "minutes");
+            var nextArrivalFormatted = moment(nextArrival).format('LLL');
+            var timeUntil = moment(nextArrivalFormatted).fromNow();
+        
+        $("#travel-table> tbody").append("<tr><td>" + childSnapshot.val().meth + "</td><td>" + childSnapshot.val().comp + "</td><td>" +
+                childSnapshot.val().dest + "</td><td>" + childSnapshot.val().freq + "</td><td>" + nextArrivalFormatted + "</td><td id=fluid'>" + timeUntil + "</td></tr>");
+
+            },
+            function(errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            });
+    };
 
 
     //click it, bop it, twist it
@@ -27,14 +56,6 @@ $(document).ready(function() {
         var destination = $("#inputDest").val().trim();
         var initial = $("#inputInit").val();
         var frequency = $("#inputFreq").val().trim();
-        var firstTimeConverted = moment(initial, "hh:mm").subtract(1, "years");
-        var currentTime = moment();
-        var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-        var tRemainder = diffTime % frequency;
-        var arrival = frequency - tRemainder;
-        var nextArrival = moment().add(arrival, "minutes");
-        var nextArrivalFormatted = moment(nextArrival).format('LLL');
-        var timeUntil = moment(nextArrivalFormatted).fromNow();
 
         // hold this for a second
         var newTravel = {
@@ -42,9 +63,8 @@ $(document).ready(function() {
             comp: company,
             dest: destination,
             init: initial,
-            freq: frequency,
-            next: nextArrivalFormatted,
-            time: timeUntil
+            freq: frequency
+
         };
 
         // put it in da base
@@ -52,24 +72,20 @@ $(document).ready(function() {
 
 
         // Logs (of LINCOLN)
-        console.log(newTravel.meth);
-        console.log(newTravel.comp);
-        console.log(newTravel.dest);
-        console.log(newTravel.init);
-        console.log(newTravel.freq);
-        console.log(newTravel.next);
-        console.log(newTravel.time);
-
-
-
-        // OMG!!
-        alert("Itinerary successfully added");
+        // console.log(newTravel.meth);
+        // console.log(newTravel.comp);
+        // console.log(newTravel.dest);
+        // console.log(newTravel.init);
+        // console.log(newTravel.freq);
+        // console.log(newTravel.next);
+        // console.log(newTravel.time);
 
         // Clear-a-box
         $("#inputComp").val("");
         $("#inputDest").val("");
         $("#inputInit").val("");
         $("#inputFreq").val("");
+        getTravel();
     });
 
     // are you watching?
@@ -83,10 +99,8 @@ $(document).ready(function() {
             var travMeth = childSnapshot.val().meth;
             var travComp = childSnapshot.val().comp;
             var travDest = childSnapshot.val().dest;
-            var travFreq = childSnapshot.val().freq;
-            var travNext = childSnapshot.val().next;
-            var travTime = childSnapshot.val().time;
             var travInit = childSnapshot.val().init;
+            var travFreq = childSnapshot.val().freq;
 
 
 
@@ -96,90 +110,35 @@ $(document).ready(function() {
             console.log(travComp);
             console.log(travDest);
             console.log(travFreq);
-            console.log(travNext);
-            console.log(travTime);
+            console.log(prevChildKey);
+            // console.log(travNext);
+            // console.log(travTime);
+            
+            
+            var firstTimeConverted = moment(travInit, "hh:mm").subtract(1, "years");
+            var currentTime = moment();
+            var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+            var tRemainder = diffTime % travFreq;
+            var arrival = travFreq - tRemainder;
+            var nextArrival = moment().add(arrival, "minutes");
+            var nextArrivalFormatted = moment(nextArrival).format('LLL');
+            var timeUntil = moment(nextArrivalFormatted).fromNow();
+            
 
             // put the lime in the coconut
             $("#travel-table> tbody").append("<tr><td>" + childSnapshot.val().meth + "</td><td>" + childSnapshot.val().comp + "</td><td>" +
-                childSnapshot.val().dest + "</td><td>" + childSnapshot.val().freq + "</td><td>" + childSnapshot.val().next + "</td><td id=fluid'>" + childSnapshot.val().time + "</td></tr>");
+                childSnapshot.val().dest + "</td><td>" + childSnapshot.val().freq + "</td><td>" + nextArrivalFormatted + "</td><td id=fluid'>" + timeUntil + "</td></tr>");
             // Does not compute
         },
         function(errorObject) {
             console.log("Errors handled: " + errorObject.code);
         });
 
-    //sweet Jesus I spent way too much time trying to get the update working...
-
-    //If you are able to show me the correct code in you comments of my project I would really appreciate it!!!
+// NAILED IT!
 
     window.setInterval(function() {
-        database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
-
-
-
-                console.log(childSnapshot.val());
-
-                // Store everything into a variable.
-                var travMeth = childSnapshot.val().meth;
-                var travComp = childSnapshot.val().comp;
-                var travDest = childSnapshot.val().dest;
-                var travFreq = childSnapshot.val().freq;
-                var travNext = childSnapshot.val().next;
-                var travTime = childSnapshot.val().time;
-
-
-
-
-
-
-
-                var initial = $(childSnapshot.val().init);
-                var frequency = $(childSnapshot.val().freq);
-                var firstTimeConverted = moment(initial, "hh:mm");
-                var currentTime = moment();
-                var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-                var tRemainder = diffTime % frequency;
-                var arrival = frequency - tRemainder;
-                var nextArrival = moment().add(arrival, "minutes");
-                var nextArrivalFormatted = moment(nextArrival).format('LLL');
-                var timeUntil = moment(childSnapshot.val().next).fromNow();
-                console.log(childSnapshot.key);
-                console.log(travMeth);
-                console.log(travComp);
-                console.log(travDest);
-                console.log(travFreq);
-                console.log(travNext);
-                console.log(travTime);
-                console.log(timeUntil);
-                var newTravel = {
-            meth: travMeth,
-            comp: travComp,
-            dest: travDest,
-            init: initial,
-            freq: frequency,
-            next: nextArrivalFormatted,
-            time: timeUntil
-        };
-
-        var playersRef = firebase.database().ref("itinerary/" + childSnapshot.key);
-        playersRef.set({
-            meth: travMeth,
-            comp: travComp,
-            dest: travDest,
-            init: initial,
-            freq: frequency,
-            next: nextArrivalFormatted,
-            time: timeUntil
-            });
-
-
-
-            },
-            function(errorObject) {
-                console.log("Errors handled: " + errorObject.code);
-            });
-
-
+        
+        getTravel();
 
     }, 5000);
 
