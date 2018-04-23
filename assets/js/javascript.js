@@ -112,76 +112,76 @@ $(document).ready(function() {
 
     //If you are able to show me the correct code in you comments of my project I would really appreciate it!!!
 
-    // window.setInterval(function() {
-    //     database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
+    window.setInterval(function() {
+        database.ref('itinerary').orderByChild("time").on("child_added", function(childSnapshot) {
 
 
 
-    //             console.log(childSnapshot.val());
+                console.log(childSnapshot.val());
 
-    //             // Store everything into a variable.
-    //             var travMeth = childSnapshot.val().meth;
-    //             var travComp = childSnapshot.val().comp;
-    //             var travDest = childSnapshot.val().dest;
-    //             var travFreq = childSnapshot.val().freq;
-    //             var travNext = childSnapshot.val().next;
-    //             var travTime = childSnapshot.val().time;
-
-
+                // Store everything into a variable.
+                var travMeth = childSnapshot.val().meth;
+                var travComp = childSnapshot.val().comp;
+                var travDest = childSnapshot.val().dest;
+                var travFreq = childSnapshot.val().freq;
+                var travNext = childSnapshot.val().next;
+                var travTime = childSnapshot.val().time;
 
 
 
 
 
-    //             var initial = $(childSnapshot.val().init);
-    //             var frequency = $(childSnapshot.val().freq);
-    //             var firstTimeConverted = moment(initial, "hh:mm");
-    //             var currentTime = moment();
-    //             var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    //             var tRemainder = diffTime % frequency;
-    //             var arrival = frequency - tRemainder;
-    //             var nextArrival = moment().add(arrival, "minutes");
-    //             var nextArrivalFormatted = moment(nextArrival).format('LLL');
-    //             var timeUntil = moment(childSnapshot.val().next).fromNow();
-    //             console.log(childSnapshot.key);
-    //             console.log(travMeth);
-    //             console.log(travComp);
-    //             console.log(travDest);
-    //             console.log(travFreq);
-    //             console.log(travNext);
-    //             console.log(travTime);
-    //             console.log(timeUntil);
-    //             var newTravel = {
-    //         meth: travMeth,
-    //         comp: travComp,
-    //         dest: travDest,
-    //         init: initial,
-    //         freq: frequency,
-    //         next: nextArrivalFormatted,
-    //         time: timeUntil
-    //     };
-
-    //     var playersRef = firebase.database().ref("itinerary/" + childSnapshot.key);
-    //     playersRef.set({
-    //         meth: travMeth,
-    //         comp: travComp,
-    //         dest: travDest,
-    //         init: initial,
-    //         freq: frequency,
-    //         next: nextArrivalFormatted,
-    //         time: timeUntil
-    //         });
 
 
+                var initial = $(childSnapshot.val().init);
+                var frequency = $(childSnapshot.val().freq);
+                var firstTimeConverted = moment(initial, "hh:mm");
+                var currentTime = moment();
+                var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+                var tRemainder = diffTime % frequency;
+                var arrival = frequency - tRemainder;
+                var nextArrival = moment().add(arrival, "minutes");
+                var nextArrivalFormatted = moment(nextArrival).format('LLL');
+                var timeUntil = moment(childSnapshot.val().next).fromNow();
+                console.log(childSnapshot.key);
+                console.log(travMeth);
+                console.log(travComp);
+                console.log(travDest);
+                console.log(travFreq);
+                console.log(travNext);
+                console.log(travTime);
+                console.log(timeUntil);
+                var newTravel = {
+            meth: travMeth,
+            comp: travComp,
+            dest: travDest,
+            init: initial,
+            freq: frequency,
+            next: nextArrivalFormatted,
+            time: timeUntil
+        };
 
-    //         },
-    //         function(errorObject) {
-    //             console.log("Errors handled: " + errorObject.code);
-    //         });
+        var playersRef = firebase.database().ref("itinerary/" + childSnapshot.key);
+        playersRef.set({
+            meth: travMeth,
+            comp: travComp,
+            dest: travDest,
+            init: initial,
+            freq: frequency,
+            next: nextArrivalFormatted,
+            time: timeUntil
+            });
 
 
 
-    // }, 5000);
+            },
+            function(errorObject) {
+                console.log("Errors handled: " + errorObject.code);
+            });
+
+
+
+    }, 5000);
 
 
 
